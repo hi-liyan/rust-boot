@@ -5,7 +5,7 @@
 1. Cargo.toml 中添加依赖
     ```toml
     [dependencies]
-    rust-boot = { version = "0.1.0", features = ["mysql", "redis"] }
+    rust-boot = { git = "https://github.com/hi-liyan/rust-boot", features = ["mysql", "redis"] }
     ```
    
 2. 项目根目录下添加配置文件：
