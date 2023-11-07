@@ -1,9 +1,11 @@
 #![feature(unboxed_closures)]
 
 use std::process;
+
 use ::redis::{Connection, RedisError};
 use axum::Router;
 use sqlx::{MySql, Pool};
+
 use crate::config::{CONFIG, Config, init_read_config};
 #[cfg(feature = "mysql")]
 use crate::db::mysql::{init_mysql, MYSQL};
