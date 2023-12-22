@@ -33,8 +33,7 @@ pub async fn init_server(router: Router) {
     let addr = SocketAddr::from(([127, 0, 0, 1], port));
     tracing::debug!("监听端口：{}", port);
 
-    axum::Server::bind(&addr)
-        .serve(router.into_make_service())
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+
+    axum::serve(listener, router.into_make_service()).await.unwrap();
 }

@@ -1,6 +1,6 @@
 use std::process;
 
-use redis::{Client, RedisResult};
+use redis::Client;
 use tokio::sync::OnceCell;
 
 use crate::get_config;

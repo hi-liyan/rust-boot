@@ -1,2 +1,2 @@
-#[cfg(feature = "mysql")]
+#[cfg(feature = "feat-mysql")]
 pub mod mysql;

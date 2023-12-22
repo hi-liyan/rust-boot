@@ -8,16 +8,16 @@ use tokio::sync::OnceCell;
 
 use crate::config::app::{App, parse_app_value};
 use crate::config::encrypt::{Encrypt, parse_encrypt_value};
-#[cfg(feature = "mysql")]
+#[cfg(feature = "feat-mysql")]
 use crate::config::mysql::{Mysql, parse_mysql_value};
-#[cfg(feature = "redis")]
+#[cfg(feature = "feat-redis")]
 use crate::config::redis::{parse_redis_value, Redis};
 use crate::get_env;
 
 pub mod app;
-#[cfg(feature = "mysql")]
+#[cfg(feature = "feat-mysql")]
 pub mod mysql;
-#[cfg(feature = "redis")]
+#[cfg(feature = "feat-redis")]
 pub mod redis;
 mod encrypt;
 
@@ -109,17 +109,17 @@ fn get_value(file_content: &FileContent) -> Result<Value, Box<dyn Error>> {
 
 fn parse_value(value: &Value) -> Config {
     let app = parse_app_value(value);
-    #[cfg(feature = "mysql")]
+    #[cfg(feature = "feat-mysql")]
     let mysql = parse_mysql_value(value);
-    #[cfg(feature = "redis")]
+    #[cfg(feature = "feat-redis")]
     let redis = parse_redis_value(value);
     let encrypt = parse_encrypt_value(value);
 
     let config = Config {
         app,
-        #[cfg(feature = "mysql")]
+        #[cfg(feature = "feat-mysql")]
         mysql,
-        #[cfg(feature = "redis")]
+        #[cfg(feature = "feat-redis")]
         redis,
         encrypt,
     };
@@ -159,9 +159,9 @@ fn get_file_extension(file: &str) -> Option<&str> {
 #[derive(Debug, Clone, Deserialize)]
 pub struct Config {
     pub app: Option<App>,
-    #[cfg(feature = "mysql")]
+    #[cfg(feature = "feat-mysql")]
     pub mysql: Option<Mysql>,
-    #[cfg(feature = "redis")]
+    #[cfg(feature = "feat-redis")]
     pub redis: Option<Redis>,
     pub encrypt: Option<Encrypt>,
 }
