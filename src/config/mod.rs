@@ -12,6 +12,7 @@ use crate::config::encrypt::{Encrypt, parse_encrypt_value};
 use crate::config::mysql::{Mysql, parse_mysql_value};
 #[cfg(feature = "feat-redis")]
 use crate::config::redis::{parse_redis_value, Redis};
+use crate::config::smtp::{parse_smtp_value, Smtp};
 use crate::get_env;
 
 pub mod app;
@@ -20,6 +21,7 @@ pub mod mysql;
 #[cfg(feature = "feat-redis")]
 pub mod redis;
 mod encrypt;
+mod smtp;
 
 pub static CONFIG: OnceCell<Config> = OnceCell::const_new();
 
@@ -114,6 +116,8 @@ fn parse_value(value: &Value) -> Config {
     #[cfg(feature = "feat-redis")]
     let redis = parse_redis_value(value);
     let encrypt = parse_encrypt_value(value);
+    #[cfg(feature = "feat-smtp")]
+    let smtp = parse_smtp_value(value);
 
     let config = Config {
         app,
@@ -122,6 +126,7 @@ fn parse_value(value: &Value) -> Config {
         #[cfg(feature = "feat-redis")]
         redis,
         encrypt,
+        smtp
     };
 
     config
@@ -164,5 +169,7 @@ pub struct Config {
     #[cfg(feature = "feat-redis")]
     pub redis: Option<Redis>,
     pub encrypt: Option<Encrypt>,
+    #[cfg(feature = "feat-smtp")]
+    pub smtp: Option<Smtp>,
 }
 

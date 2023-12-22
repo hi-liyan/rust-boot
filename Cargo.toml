@@ -7,13 +7,13 @@ authors = ["liyan"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
-feat-mysql = []
-feat-redis = []
+feat-mysql = ["sqlx"]
+feat-redis = ["redis"]
+feat-smtp = ["lettre"]
 
 [dependencies]
 tokio = { version = "1.35.0", features = ["full"] }
 axum = "0.7.2"
-sqlx = { version = "0.7.3", features = ["runtime-tokio", "mysql", "chrono"] }
 once_cell = "1.19.0"
 serde = { version = "1.0.193", features = ["derive"] }
 serde_json = "1.0.108"
@@ -23,4 +23,19 @@ tracing-subscriber = { version = "0.3.18", features = ["env-filter", "local-time
 dotenv = "0.15.0"
 chrono = { version = "0.4.31", features = ["serde"] }
 time = { version = "0.3.31", features = ["macros"] }
-redis = { version = "0.24.0", features = ["tokio-comp"] }
+
+[dependencies.sqlx]
+version = "0.7.3"
+optional = true
+default-features = false
+features = ["runtime-tokio", "mysql", "chrono"]
+
+[dependencies.redis]
+version = "0.24.0"
+optional = true
+default-features = false
+features = ["tokio-comp"]
+
+[dependencies.lettre]
+version = "0.11.2"
+optional = true

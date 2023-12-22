@@ -5,6 +5,7 @@ use std::process;
 #[cfg(feature = "feat-redis")]
 use ::redis::{Connection, RedisError};
 use axum::Router;
+use lettre::{SmtpTransport};
 #[cfg(feature = "feat-mysql")]
 use sqlx::{MySql, Pool};
 
@@ -13,6 +14,7 @@ use crate::config::{CONFIG, Config, init_read_config};
 use crate::db::mysql::{init_mysql, MYSQL};
 use crate::env::{Env, ENV, init_read_env};
 use crate::log::init_log;
+use crate::mail::{init_mailer, MAILER};
 #[cfg(feature = "feat-redis")]
 use crate::redis::{init_redis, REDIS_CLIENT};
 use crate::server::init_server;
@@ -26,6 +28,7 @@ mod log;
 mod server;
 #[cfg(feature = "feat-redis")]
 mod redis;
+mod mail;
 
 pub struct AppStart {
     router: Option<Router>,
@@ -55,6 +58,8 @@ impl AppStart {
         init_mysql().await;        // step 4. 初始化 Mysql
         #[cfg(feature = "feat-redis")]
         init_redis();           // step 5. 初始化 Redis
+        #[cfg(feature = "feat-smtp")]
+        init_mailer(); // 初始化 SMTP 客户端
         init_server(self.router.clone().unwrap()).await;    // step 6. 初始化axum服务
     }
 }
@@ -87,4 +92,10 @@ pub fn get_mysql() -> &'static Pool<MySql> {
 pub fn get_redis() -> Result<Connection, RedisError> {
     let client = REDIS_CLIENT.get().unwrap();
     client.get_connection()
+}
+
+/// # 获取 Mailer 实例
+#[cfg(feature = "feat-smtp")]
+pub fn get_mailer() -> &'static SmtpTransport {
+    MAILER.get().unwrap()
 }
