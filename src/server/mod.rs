@@ -30,10 +30,16 @@ pub async fn init_server(router: Router) {
         Some(port) => port
     };
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], port));
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
     tracing::debug!("监听端口：{}", port);
 
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap_or_else(|e| {
+        tracing::error!("发生错误：{}", e);
+        process::exit(0);
+    });
 
-    axum::serve(listener, router.into_make_service()).await.unwrap();
+    axum::serve(listener, router.into_make_service()).await.unwrap_or_else(|e| {
+        tracing::error!("发生错误：{}", e);
+        process::exit(0);
+    });
 }

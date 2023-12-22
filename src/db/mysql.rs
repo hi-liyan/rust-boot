@@ -29,7 +29,10 @@ pub async fn init_mysql() {
         .max_connections(mysql.max_connections.unwrap_or(30))
         .connect(&url)
         .await
-        .unwrap();
+        .unwrap_or_else(|e| {
+            tracing::error!("发生错误：{:?}", e);
+            process::exit(0);
+        });
 
     MYSQL.set(pool).unwrap();
     tracing::debug!("MySQL 初始化完成。")
