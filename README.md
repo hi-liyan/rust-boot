@@ -51,8 +51,8 @@
 2. `lov_level` 日志等级，默认值：debug
 
 ## features
-1. `mysql`
-2. `redis`
+1. `feat-mysql` 开启 MySQL 特性
+2. `feat-redis` 开启 Redis 特性
 
 ## API
 1. `get_env` 获取环境变量。
